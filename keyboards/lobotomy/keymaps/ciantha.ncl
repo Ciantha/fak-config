@@ -1,7 +1,7 @@
 let { tap, hold, td, combo, macro, ..} = import "fak/keycode.ncl" in
 
 # add number of combos to physical keys for later use
-let virtual_key_count = 1 in
+let virtual_key_count = 12 in
 let key_count = 34 + virtual_key_count in
 
 # convenience aliases
@@ -29,6 +29,10 @@ let cu = {
   COPY = md.lctl & kc.INS, # md.lctl & kc.C,
   PSTE = md.lsft & kc.INS, # md.lctl & kc.V,
   CUT  = md.lctl & kc.X,
+  OE = macro.make [ macro.press mdh.ralt, macro.tap kc.O, macro.release mdh.ralt, ],
+  AE = macro.make [ macro.press mdh.ralt, macro.tap kc.A, macro.release mdh.ralt, ],
+  AO = macro.make [ macro.press mdh.ralt, macro.tap kc.W, macro.release mdh.ralt, ],
+  TD0 = td.make 200 [kc.PLUS & hold.reg.layer 1,],
 } in
 
 # home row mods
@@ -36,14 +40,14 @@ let cu = {
 # I've added empty ones here for simplicity. See thumb function below for a slightly more involved approach.
 let hrm = {
   # home row mods
-  A = mdh.lgui & kc.A & hold.reg.behavior {},
-  S = mdh.lalt & kc.S & hold.reg.behavior {},
-  D = mdh.lctl & kc.D & hold.reg.behavior {},
-  F = mdh.lsft & kc.F & hold.reg.behavior {},
-  J = mdh.rsft & kc.J & hold.reg.behavior {},
-  K = mdh.rctl & kc.K & hold.reg.behavior {},
-  L = mdh.ralt & kc.L & hold.reg.behavior {},
-  ";" = mdh.rgui & kc.SCLN & hold.reg.behavior {},
+  # A = mdh.lgui & kc.A & hold.reg.behavior {},
+  # S = mdh.lalt & kc.S & hold.reg.behavior {},
+  D = mdh.lsft & kc.D & hold.reg.behavior {},
+  # F = mdh.lsft & kc.F & hold.reg.behavior {},
+  # J = mdh.rsft & kc.J & hold.reg.behavior {},
+  K = mdh.rsft & kc.K & hold.reg.behavior {},
+  # L = mdh.ralt & kc.L & hold.reg.behavior {},
+  # ";" = mdh.rgui & kc.SCLN & hold.reg.behavior {},
 } in
 
 # thumb keys defined here
@@ -55,40 +59,69 @@ let thumb = fun thumb_idx =>
     key_interrupts = std.array.replicate key_count { decision = 'hold, trigger_on = 'release },
   } in
   [
-    kc.QUOT & lt 1 & hold.reg.behavior thumb_behavior, # thumb 0
-    kc.SPC  & lt 2 & hold.reg.behavior thumb_behavior, # thumb 1
+    kc.A & lt 2 & hold.reg.behavior thumb_behavior, # thumb 0
+    kc.BSPC  & lt 1 & hold.reg.behavior thumb_behavior, # thumb 1
     kc.BSPC & lt 3 & hold.reg.behavior thumb_behavior, # thumb 2
     kc.ENT  & lt 4 & hold.reg.behavior thumb_behavior, # thumb 3
   ]
   |> std.array.at thumb_idx # pick out the appropriate entry from the above list
 in
 
+let combos_not_base = [
+  tx & hx, tx & hx, tx & hx, tx & hx,
+  tx & hx, tx & hx, tx & hx, tx & hx,
+  tx & hx, tx & hx, tx & hx, tx & hx,
+] in
+
 ### Keymap itself! ###
 {
   # combos and other virtual keys are defined here
   # (careful, changes here require changes above! marked by "#1")
   virtual_keys = [
-    combo.make 50 [0, 9],
+    combo.make 50 [0, 9], # Q+P
+    combo.make 50 [0, 1], # Q+W
+    combo.make 50 [0, 2], # Q+E
+    combo.make 50 [11, 12], # S+D
+    combo.make 50 [6, 7], # U+I
+    combo.make 50 [7, 8], # U+I+O is impossible
+    combo.make 50 [8, 9], # O+P
+    combo.make 50 [18, 19], # L+Ö
+    combo.make 50 [17, 18], # K+L+Ö is imposible
+    combo.make 50 [26, 27], # m+,
+    combo.make 50 [27, 28], # ,+.
+    combo.make 50 [12, 17], # D+K
   ],
   layers = [
     # ALPHAS
     [
       kc.Q,    kc.W,    kc.E,    kc.R,    kc.T,        kc.Y,    kc.U,    kc.I,    kc.O,   kc.P,
-      hrm.A,   hrm.S,   hrm.D,   hrm.F,   kc.G,        kc.H,    hrm.J,   hrm.K,   hrm.L,  hrm.";",
-      kc.Z,    kc.X,    kc.C,    kc.V,    kc.B,        kc.N,    kc.M,    kc.COMM, kc.DOT, kc.SLSH,
+      thumb 0,   kc.S,   hrm.D,   kc.F,   kc.G,        kc.H,    kc.J,   hrm.K,   kc.L,  cu.OE,
+      kc.Z,    kc.X,    kc.C,    kc.V,    kc.B,        kc.N,    kc.M,    kc.COMM, kc.DOT, md.lgui,
                                  # thumb keys are defined above in the function "thumb"
-                                 thumb 0, thumb 1,     thumb 2, thumb 3,
+                                 md.lctl, thumb 1,     kc.SPACE, md.lalt,
       # combos:
       fak.BOOT,
+      kc.ESCAPE,
+      kc.DELETE,
+      kc.TAB,
+      kc.QUOTE,
+      ks.DQUO,
+      cu.AO,
+      cu.AE,
+      kc.ENTER,
+      ks.QUES,
+      kc.SLASH
+      fak.CWTG,
+
     ],
     # NUM, transparent holds makes hrm work on the left hand here
     [
-      tx & hx,      tx & hx,      tx & hx,      tx & hx,      tx & hx,   tx & hx, kc.N7,   kc.N8,   kc.N9,   tx & hx,
-      kc.PPLS & ht, kc.PMNS & ht, kc.PAST & ht, kc.PSLS & ht, tx & ht,   tx & hx, kc.N4,   kc.N5,   kc.N6,   kc.DOT,
+      ks.EXLM,  ks.AT,  ks.HASH,  ks.DLR,  ks.PERC,  ks.CIRC,  ks.AMPR,  ks.ASTR,  kc.GRAVE,  kc.BACKSLASH,
+      kc.N1,    kc.N2,  kc.N3,    kc.N4,   kc.N5,    kc.N6,    kc.N7,    kc.N8,    kc.N9,     kc.N0,
       tx & hx,      tx & hx,      tx & hx,      tx & hx,      tx & hx,   tx & hx, kc.N1,   kc.N2,   kc.N3,   tx & hx,
                                                 tt & ht,      tt & ht,   kc.E,    kc.N0,
       # combos (need to add these to every layer)
-      tx & hx,
+      @combos_not_base,
     ],
     # NAV
     [
@@ -97,7 +130,7 @@ in
       tx & hx,    cu.COPY,      cu.CUT,       cu.PSTE,      tx & hx,          tx & hx,    hx & tx,    kc.PGUP,  hx & tx,  tx & hx,
                                               tt & ht,      tt & ht,          tt & ht,    tt & ht,
       # combos (need to add these to every layer)
-      tx & hx,
+      @combos_not_base,
     ],
     # SYM
     [
@@ -106,7 +139,7 @@ in
       tx & hx, kc.GRV,  ks.DQUO, ks.UNDS, tx & hx,   tx & hx, kc.BSLS, ks.PIPE, kc.EQL,  hx & hx,
                                  ks.TILD, tt & ht,   tt & ht, tt & ht,
       # combos (need to add these to every layer)
-      tx & hx,
+      @combos_not_base,
     ],
     # FUN
     [
@@ -115,7 +148,7 @@ in
       tx & hx, kc.F9,    kc.F8,   kc.F7,   tx & hx,   tx & hx, kc.F1,   kc.F2,   kc.F3,   tx & hx,
                                   tt & ht, tt & ht,   tt & ht, tt & ht,
       # combos (need to add these to every layer)
-      tx & hx,
+      @combos_not_base,
     ],
   ]
 }
