@@ -79,18 +79,6 @@ let thumb = fun thumb_idx =>
   |> std.array.at thumb_idx # pick out the appropriate entry from the above list
 in
 
-let combos_num = [
-  tx & hx, tx & hx, tx & hx,  tx & hx,
-  tx & hx, tx & hx, tx & hx,  tx & hx,
-  tx & hx, ks.PLUS, kc.EQUAL, tx & hx,
-] in
-
-let combos_undefined = [
-  tx & hx, tx & hx, tx & hx, tx & hx,
-  tx & hx, tx & hx, tx & hx, tx & hx,
-  tx & hx, tx & hx, tx & hx, tx & hx,
-] in
-
 ### Keymap itself! ###
 {
   # combos and other virtual keys are defined here
@@ -128,18 +116,19 @@ let combos_undefined = [
       cu.AE,
       kc.ENTER,
       ks.QUES,
-      kc.SLASH
+      kc.SLASH,
       fak.CWTG,
-
     ],
     # NUM, transparent holds (&hx) to access the right hand hrm
     [
-      ks.EXLM,  ks.AT,   ks.HASH, ks.DLR,   ks.PERC,  ks.CIRC,  ks.AMPR,  ks.ASTR,   kc.GRAVE,  kc.BACKSLASH,
-      kc.N1,    kc.N2,   N3,      kc.N4,    kc.N5,    kc.N6,    kc.N7,    kc.N8 &hx, kc.N9,     kc.N0,
-      kc.MINUS, ks.UNDS, ks.LABK, ks.LPRN   ks.LCBR,  ks.RCBR,  ks.RPRN,  ks.RABK,   kc.EQUAL,  tx & hx,
+      ks.EXLM,  ks.AT,   ks.HASH, ks.DLR,   ks.PERC,  ks.CIRC,  ks.AMPR,  ks.ASTR,    kc.GRAVE,  kc.BACKSLASH,
+      kc.N1,    kc.N2,   hrm.N3,  kc.N4,    kc.N5,    kc.N6,    kc.N7,    kc.N8 & hx, kc.N9,     kc.N0,
+      kc.MINUS, ks.UNDS, ks.LABK, ks.LPRN   ks.LCBR,  ks.RCBR,  ks.RPRN,  ks.RABK,    kc.EQUAL,  tx & hx,
                                    tt & ht, tt & ht,  tt & ht,  kc.PRINT_SCREEN,
       # combos (need to add these to every layer)
-      @combos_num,
+      tx & hx, tx & hx, tx & hx,  tx & hx,
+      tx & hx, tx & hx, tx & hx,  tx & hx,
+      tx & hx, ks.PLUS, kc.EQUAL,  tx & hx,
     ],
     # NAV
     [
@@ -148,7 +137,10 @@ let combos_undefined = [
       tx & hx,    cu.CUT,    cu.COPY,    cu.PSTE,    cu.UNDO,   tx & hx,    tx & hx,    tx & hx,    tx & hx,   tx & hx,
                           kc.CAPS_LOCK,   kc.LEFT_BRACKET,   kc.RIGHT_BRACKET,    tt & ht,
       # combos (need to add these to every layer)
-      @combos_undefined,
+      tx & hx, tx & hx, tx & hx, tx & hx,
+      tx & hx, tx & hx, tx & hx, tx & hx,
+      tx & hx, tx & hx, tx & hx, tx & hx,
+      
     ],
     # KEYOVERRIDE
     [
@@ -157,7 +149,9 @@ let combos_undefined = [
       tt & ht, tt & ht, tt & ht, tt & ht, tt & ht,   tt & ht, tt & ht, cu.scln, cu.coln, tt & ht,
                                  tt & ht, tt & ht,   tt & ht, tt & ht,
       # combos (need to add these to every layer)
-      @combos_undefined,
+      tx & hx, tx & hx, tx & hx,  tx & hx,
+      tx & hx, tx & hx, tx & hx,  tx & hx,
+      tx & hx, tx & hx, tx & hx,  tx & hx,
     ],
     # FUN, not in use
     [
@@ -166,7 +160,9 @@ let combos_undefined = [
       tx & hx, kc.F9,    kc.F8,   kc.F7,   tx & hx,   tx & hx, kc.F1,   kc.F2,   kc.F3,   tx & hx,
                                   tt & ht, tt & ht,   tt & ht, tt & ht,
       # combos (need to add these to every layer)
-      @combos_undefined,
+      tx & hx, tx & hx, tx & hx,  tx & hx,
+      tx & hx, tx & hx, tx & hx,  tx & hx,
+      tx & hx, tx & hx, tx & hx,  tx & hx,
     ],
   ]
 }
