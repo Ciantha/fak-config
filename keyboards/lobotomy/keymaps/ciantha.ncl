@@ -123,7 +123,7 @@ in
     [
       ks.EXLM,  ks.AT,   ks.HASH, ks.DLR,   ks.PERC,  ks.CIRC,  ks.AMPR,  ks.ASTR,    kc.GRAVE,  kc.BACKSLASH,
       kc.N1,    kc.N2,   hrm.N3,  kc.N4,    kc.N5,    kc.N6,    kc.N7,    kc.N8 & ht, kc.N9,     kc.N0,
-      kc.MINUS, ks.UNDS, ks.LABK, ks.LPRN   ks.LCBR,  ks.RCBR,  ks.RPRN,  ks.RABK,    kc.EQUAL,  tx & hx,
+      kc.MINUS, ks.UNDS, ks.LABK, ks.LPRN,   ks.LCBR,  ks.RCBR,  ks.RPRN,  ks.RABK,    kc.EQUAL,  tx & hx,
                                    tt & ht, tt & ht,  tt & ht,  kc.PRINT_SCREEN,
       # combos (need to add these to every layer)
       tx & hx, tx & hx, tx & hx,  tx & hx,
@@ -132,7 +132,7 @@ in
     ],
     # NAV
     [
-      tx & hx,    cu.VR      kc.UP,      cu.VL,      tx & hx,   tx & hx,    tx & hx,    tx & hx,    tx & hx,   tx & hx,
+      tx & hx,    cu.VR,      kc.UP,      cu.VL,      tx & hx,   tx & hx,    tx & hx,    tx & hx,    tx & hx,   tx & hx,
       tx & hx,    kc.LEFT,   kc.DOWN,    kc.RIGHT,   kc.END,    tx & hx,    tx & hx,    tx & hx,    tx & hx,   tx & hx,
       tx & hx,    cu.CUT,    cu.COPY,    cu.PSTE,    cu.UNDO,   tx & hx,    tx & hx,    tx & hx,    tx & hx,   tx & hx,
                           kc.CAPS_LOCK,   kc.LEFT_BRACKET,   kc.RIGHT_BRACKET,    tt & ht,
