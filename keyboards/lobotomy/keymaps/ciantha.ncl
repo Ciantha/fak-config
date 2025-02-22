@@ -119,10 +119,10 @@ in
       kc.SLASH,
       fak.CWTG,
     ],
-    # NUM, transparent holds (&hx) to access the right hand hrm
+    # NUM, transparent holds (&ht) to access the right hand hrm
     [
       ks.EXLM,  ks.AT,   ks.HASH, ks.DLR,   ks.PERC,  ks.CIRC,  ks.AMPR,  ks.ASTR,    kc.GRAVE,  kc.BACKSLASH,
-      kc.N1,    kc.N2,   hrm.N3,  kc.N4,    kc.N5,    kc.N6,    kc.N7,    kc.N8 & hx, kc.N9,     kc.N0,
+      kc.N1,    kc.N2,   hrm.N3,  kc.N4,    kc.N5,    kc.N6,    kc.N7,    kc.N8 & ht, kc.N9,     kc.N0,
       kc.MINUS, ks.UNDS, ks.LABK, ks.LPRN   ks.LCBR,  ks.RCBR,  ks.RPRN,  ks.RABK,    kc.EQUAL,  tx & hx,
                                    tt & ht, tt & ht,  tt & ht,  kc.PRINT_SCREEN,
       # combos (need to add these to every layer)
