@@ -66,7 +66,8 @@ let hrm = {
 # this function maps the numbers 0, 1, 2, 3 to the below behaviors
 let thumb = fun thumb_idx =>
   let thumb_behavior = {
-    timeout_ms = 150,
+    timeout_ms = 180,
+    quick_tap_ms = 160,
     timeout_decision = 'hold,
     key_interrupts = std.array.replicate key_count { decision = 'hold, trigger_on = 'release },
   } in
