@@ -24,6 +24,14 @@ let tt = tap.trans in
 let hx = hold.none in
 let ht = hold.trans in
 
+let ki = {
+  hp = { decision = 'hold, trigger_on = 'press },
+  tp = { decision = 'tap, trigger_on = 'press },
+  hr = { decision = 'hold, trigger_on = 'release },
+  tr = { decision = 'tap, trigger_on = 'release },
+  xx = { decision = 'none },
+} in
+
 # custom keycodes in a tidy container (access with `cu.COPY` etc.)
 # overrides for comma and dot will be activated while shift is
 # held, so we need to take that into account.
@@ -46,21 +54,48 @@ let cu = {
   coln = kc.SCLN,          # shift held means this'll type colon.
 } in
 
+let virtual_interrupts = std.array.replicate virtual_key_count ki.hr in
+
+let htb_hrm_left = {
+  timeout_ms = 170,          # Known as tapping term in QMK and ZMK. 200 by default.
+  timeout_decision = 'hold,  # Can be set to 'hold (default) or 'tap
+  # eager_decision = 'tap,     # Can be set to 'hold, 'tap, or 'none (default)
+  key_interrupts = [
+      ki.tp, ki.tp, ki.tp, ki.tp, ki.tp,    ki.hr, ki.hr, ki.hr, ki.hr, ki.hr,
+      ki.tr, ki.tr, ki.tr, ki.tr, ki.tr,    ki.hr, ki.hr, ki.hr, ki.hr, ki.hr,
+      ki.tp, ki.tp, ki.tp, ki.tp, ki.tp,    ki.hr, ki.hr, ki.hr, ki.hr, ki.hr,
+                           ki.hr, ki.hr,    ki.hr, ki.hr,
+    ] @ virtual_interrupts
+} in
+
+let htb_hrm_right = {
+  timeout_ms = 170,          # Known as tapping term in QMK and ZMK. 200 by default.
+  timeout_decision = 'hold,  # Can be set to 'hold (default) or 'tap
+  # eager_decision = 'tap,     # Can be set to 'hold, 'tap, or 'none (default)
+  key_interrupts = [
+      ki.hr, ki.hr, ki.hr, ki.hr, ki.hr,    ki.tp, ki.tp, ki.tp, ki.tp, ki.tp,
+      ki.hr, ki.hr, ki.hr, ki.hr, ki.hr,    ki.tr, ki.tr, ki.tr, ki.tr, ki.tr,
+      ki.hr, ki.hr, ki.hr, ki.hr, ki.hr,    ki.tp, ki.tp, ki.tp, ki.tp, ki.tp,
+                           ki.hr, ki.hr,    ki.hr, ki.hr,
+    ] @ virtual_interrupts,
+} in
+
 # home row mods
 # hold.reg.behavior is required for all hold-taps!
 # I've added empty ones here for simplicity. See thumb function below for a slightly more involved approach.
 let hrm = {
   # home row mods
-  # A = mdh.lgui & kc.A & hold.reg.behavior {},
-  # S = mdh.lalt & kc.S & hold.reg.behavior {},
-  D = mdh.lsft & lt 3 & kc.D & hold.reg.behavior {},
-  N3 = mdh.lsft & kc.N3 & hold.reg.behavior {},
-  # F = mdh.lsft & kc.F & hold.reg.behavior {},
-  # J = mdh.rsft & kc.J & hold.reg.behavior {},
-  K = mdh.rsft & kc.K & hold.reg.behavior {},
-  # L = mdh.ralt & kc.L & hold.reg.behavior {},
-  # ";" = mdh.rgui & kc.SCLN & hold.reg.behavior {},
+  "PRINT" = mdh.lgui & kc.PRINT_SCREEN & hold.reg.behavior {},
+  S = mdh.lalt & kc.S & hold.reg.behavior htb_hrm_left,
+  D = mdh.lsft & lt 3 & kc.D & hold.reg.behavior htb_hrm_left,
+  N3 = mdh.lsft & kc.N3 & hold.reg.behavior htb_hrm_left,
+  F = mdh.lctl & kc.F & hold.reg.behavior htb_hrm_left,
+  J = mdh.rctl & kc.J & hold.reg.behavior htb_hrm_right,
+  K = mdh.rsft & kc.K & hold.reg.behavior htb_hrm_right,
+  L = mdh.ralt & kc.L & hold.reg.behavior htb_hrm_right,
+  "OE" = mdh.rgui & cu.OE & hold.reg.behavior htb_hrm_right,
 } in
+
 
 # thumb keys defined here
 # this function maps the numbers 0, 1, 2, 3 to the below behaviors
@@ -102,10 +137,10 @@ in
     # ALPHAS
     [
       kc.Q,    kc.W,    kc.E,    kc.R,    kc.T,        kc.Y,     kc.U,    kc.I,    kc.O,   kc.P,
-      thumb 0,   kc.S,   hrm.D,   kc.F,   kc.G,        kc.H,     kc.J,   hrm.K,   kc.L,  cu.OE,
+      thumb 0, hrm.S,   hrm.D,   hrm.F,   kc.G,        kc.H,     hrm.J,   hrm.K,   hrm.L,  hrm."OE",
       kc.Z,    kc.X,    kc.C,    kc.V,    kc.B,        kc.N,     kc.M,    kc.COMM, kc.DOT, md.lgui,
                                  # thumb keys are defined above in the function "thumb"
-                                 md.lctl, thumb 1,     kc.SPACE, md.lalt,
+                                 kc.ENTER, thumb 1,     kc.SPACE, hrm."PRINT",
       # combos:
       fak.BOOT,
       kc.ESCAPE,
@@ -151,7 +186,7 @@ in
                                  tt & ht, tt & ht,   tt & ht, tt & ht,
       # combos (need to add these to every layer)
       tx & hx, tx & hx, tx & hx,  tx & hx,
-      tx & hx, tx & hx, tx & hx,  tx & hx,
+      tx & hx, tx & hx, cu.AO,    cu.AE,
       tx & hx, tx & hx, tx & hx,  tx & hx,
     ],
     # FUN, not in use
